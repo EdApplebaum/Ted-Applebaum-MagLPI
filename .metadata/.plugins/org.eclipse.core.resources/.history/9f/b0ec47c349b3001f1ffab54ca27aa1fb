@@ -1,0 +1,13 @@
+/*
+ * Timer_Driver.c
+ *
+ *  Created on: Nov 19, 2024
+ *      Author: 14408
+ */
+
+void TimerInit() {
+	Timer.Instance = TIM2;
+	Timer.Init.Period = 1000000;
+	__HAL_RCC_TIM2_CLK_ENABLE();
+	HAL_TIM2_Init(&TIM2);
+}

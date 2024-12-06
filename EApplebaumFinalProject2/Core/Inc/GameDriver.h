@@ -9,13 +9,15 @@
 #define INC_GAMEDRIVER_H_
 
 #include "LCD_Driver.h"
-#include "stm32f4xx_hal_rng.h"
 
 #define BOARD_WIDTH 10
 #define BOARD_HEIGHT 10
+#define MOVE_RIGHT 0x1
+#define MOVE_LEFT 0x2
 
 static RNG_HandleTypeDef HRNG;
-
+static uint8_t rotate_pending = 0;
+static uint8_t translate_pending = 0;
 
 
 // Define the shapes of the Tetrominoes using a 4x4 matrix
@@ -75,7 +77,7 @@ int board[BOARD_HEIGHT][BOARD_WIDTH];
 
 // Function declarations
 void initialize_game();
-void RNG_Init();
+void Game_RNG_Init();
 void draw_block(uint8_t x, uint8_t y, uint16_t color);
 
 void draw_board();

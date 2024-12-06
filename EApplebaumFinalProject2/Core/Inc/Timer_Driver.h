@@ -7,7 +7,11 @@
 
 #ifndef INC_TIMER_DRIVER_H_
 #define INC_TIMER_DRIVER_H_
+#include "stm32f4xx_hal.h"
 
+static TIM_HandleTypeDef Timer;
+
+void TimerInit();
 
 
 #endif /* INC_TIMER_DRIVER_H_ */

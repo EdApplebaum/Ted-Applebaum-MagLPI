@@ -176,6 +176,9 @@ void game_over() {
 
 }
 
-
-
+void Game_RNG_Init() {
+	HRNG.Instance = RNG;
+	__HAL_RCC_RNG_CLK_ENABLE();
+	HAL_RNG_Init(&HRNG);
+}
 
