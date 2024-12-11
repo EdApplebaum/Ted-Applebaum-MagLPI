@@ -3825,7 +3825,6 @@ void HAL_TIM_IRQHandler(TIM_HandleTypeDef *htim)
   uint32_t itsource = htim->Instance->DIER;
   uint32_t itflag   = htim->Instance->SR;
 
-
   /* Capture compare 1 event */
   if ((itflag & (TIM_FLAG_CC1)) == (TIM_FLAG_CC1))
   {

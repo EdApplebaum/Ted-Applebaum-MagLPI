@@ -1,33 +1,18 @@
-17:12:13 **** Incremental Build of configuration Debug for project EApplebaumFinalProject2 ****
+20:43:07 **** Incremental Build of configuration Debug for project EApplebaumFinalProject2 ****
 make -j20 all 
-arm-none-eabi-gcc "../Core/Src/ApplicationCode.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F429xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/ApplicationCode.d" -MT"Core/Src/ApplicationCode.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/ApplicationCode.o"
 arm-none-eabi-gcc "../Core/Src/GameDriver.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F429xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/GameDriver.d" -MT"Core/Src/GameDriver.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/GameDriver.o"
-arm-none-eabi-gcc "../Core/Src/LCD_Driver.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F429xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/LCD_Driver.d" -MT"Core/Src/LCD_Driver.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/LCD_Driver.o"
 arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F429xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
-arm-none-eabi-gcc "../Core/Src/stmpe811.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F429xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stmpe811.d" -MT"Core/Src/stmpe811.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/stmpe811.o"
-In file included from ../Core/Inc/ApplicationCode.h:15,
-                 from ../Core/Src/main.c:21:
-../Core/Inc/Timer_Driver.h:12:26: warning: 'Timer' defined but not used [-Wunused-variable]
-   12 | static TIM_HandleTypeDef Timer;
-      |                          ^~~~~
-In file included from ../Core/Src/GameDriver.c:7:
-../Core/Inc/GameDriver.h:20:16: warning: 'translate_pending' defined but not used [-Wunused-variable]
-   20 | static uint8_t translate_pending = 0;
-      |                ^~~~~~~~~~~~~~~~~
-../Core/Inc/GameDriver.h:19:16: warning: 'rotate_pending' defined but not used [-Wunused-variable]
-   19 | static uint8_t rotate_pending = 0;
-      |                ^~~~~~~~~~~~~~
 arm-none-eabi-gcc -o "EApplebaumFinalProject2.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\14408\STM32CubeIDE\workspace_1.16.0\ECEN2370_FinalProject\EApplebaumFinalProject2\STM32F429ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="EApplebaumFinalProject2.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: EApplebaumFinalProject2.elf
  
 arm-none-eabi-size  EApplebaumFinalProject2.elf 
 arm-none-eabi-objdump -h -S EApplebaumFinalProject2.elf  > "EApplebaumFinalProject2.list"
    text	   data	    bss	    dec	    hex	filename
-  29340	    120	 155984	 185444	  2d464	EApplebaumFinalProject2.elf
+  35448	    232	 156080	 191760	  2ed10	EApplebaumFinalProject2.elf
 Finished building: default.size.stdout
  
 Finished building: EApplebaumFinalProject2.list
  
 
-17:12:14 Build Finished. 0 errors, 3 warnings. (took 1s.493ms)
+20:43:08 Build Finished. 0 errors, 0 warnings. (took 1s.88ms)
 

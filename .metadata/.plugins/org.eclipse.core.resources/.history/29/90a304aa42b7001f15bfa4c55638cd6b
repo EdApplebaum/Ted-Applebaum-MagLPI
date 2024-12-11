@@ -1,0 +1,438 @@
+/*
+ * GameDriver.c
+ *
+ *  Created on: Nov 19, 2024
+ *      Author: Ted Applebaum
+ */
+#include "GameDriver.h"
+#include <math.h>
+
+uint8_t tetrominoes[7][4][4] = {
+    // O shape
+    {
+        {1, 1, 0, 0},
+        {1, 1, 0, 0},
+        {0, 0, 0, 0},
+        {0, 0, 0, 0}
+    },
+    // I shape
+    {
+        {1, 1, 1, 1},
+        {0, 0, 0, 0},
+        {0, 0, 0, 0},
+        {0, 0, 0, 0}
+    },
+    // S shape
+    {
+        {0, 1, 1, 0},
+        {1, 1, 0, 0},
+        {0, 0, 0, 0},
+        {0, 0, 0, 0}
+    },
+    // Z shape
+    {
+        {1, 1, 0, 0},
+        {0, 1, 1, 0},
+        {0, 0, 0, 0},
+        {0, 0, 0, 0}
+    },
+    // L shape
+    {
+        {1, 0, 0, 0},
+        {1, 1, 1, 0},
+        {0, 0, 0, 0},
+        {0, 0, 0, 0}
+    },
+    // J shape
+    {
+        {0, 0, 1, 0},
+        {1, 1, 1, 0},
+        {0, 0, 0, 0},
+        {0, 0, 0, 0}
+    },
+    // T shape
+    {
+        {0, 1, 0, 0},
+        {1, 1, 1, 0},
+        {0, 0, 0, 0},
+        {0, 0, 0, 0}
+    }
+};
+
+uint8_t board[BOARD_HEIGHT][BOARD_WIDTH];
+uint8_t current_tetromino[4][4];
+uint8_t current_x, current_y;
+uint8_t current_rotation;
+uint8_t current_type;
+uint16_t score;
+
+static RNG_HandleTypeDef HRNG;
+// Initialize game settings
+void Display_Start_Screen() {
+	current_type = 0;
+    current_rotation = 0;
+
+    for (int y = 0; y < 4; y++) {
+        for (int x = 0; x < 4; x++) {
+            current_tetromino[y][x] = tetrominoes[current_type][y][x];
+        }
+    }
+
+    current_x = 0;
+    current_y = 0;
+
+    place_tetromino();
+
+	current_type = 1;
+    current_rotation = 0;
+
+    for (int y = 0; y < 4; y++) {
+        for (int x = 0; x < 4; x++) {
+            current_tetromino[y][x] = tetrominoes[current_type][y][x];
+        }
+    }
+
+    current_x = 3;
+    current_y = 0;
+
+    place_tetromino();
+
+	current_type = 2;
+    current_rotation = 0;
+
+    for (int y = 0; y < 4; y++) {
+        for (int x = 0; x < 4; x++) {
+            current_tetromino[y][x] = tetrominoes[current_type][y][x];
+        }
+    }
+
+    current_x = 7;
+    current_y = 0;
+
+    place_tetromino();
+
+	current_type = 3;
+    current_rotation = 0;
+
+    for (int y = 0; y < 4; y++) {
+        for (int x = 0; x < 4; x++) {
+            current_tetromino[y][x] = tetrominoes[current_type][y][x];
+        }
+    }
+
+    current_x = 0;
+    current_y = 4;
+
+    place_tetromino();
+
+	current_type = 4;
+    current_rotation = 0;
+
+    for (int y = 0; y < 4; y++) {
+        for (int x = 0; x < 4; x++) {
+            current_tetromino[y][x] = tetrominoes[current_type][y][x];
+        }
+    }
+
+    current_x = 4;
+    current_y = 4;
+
+    place_tetromino();
+	current_type = 5;
+    current_rotation = 0;
+
+    for (int y = 0; y < 4; y++) {
+        for (int x = 0; x < 4; x++) {
+            current_tetromino[y][x] = tetrominoes[current_type][y][x];
+        }
+    }
+
+    current_x = 0;
+    current_y = 8;
+
+    place_tetromino();
+
+	current_type = 6;
+    current_rotation = 0;
+
+    for (int y = 0; y < 4; y++) {
+        for (int x = 0; x < 4; x++) {
+            current_tetromino[y][x] = tetrominoes[current_type][y][x];
+        }
+    }
+
+    current_x = 4;
+    current_y = 8;
+
+    place_tetromino();
+}
+
+void initialize_game() {
+    Game_RNG_Init();
+    for (int y = 0; y < BOARD_HEIGHT; y++) {
+        for (int x = 0; x < BOARD_WIDTH; x++) {
+            board[y][x] = 0;
+        }
+    }
+    spawn_tetromino();
+    Timer2_Reset();
+    Timer2_Start();
+}
+
+void draw_block(uint8_t x, uint8_t y, uint16_t color) {
+	for(int temp_x = x*LCD_PIXEL_WIDTH/BOARD_WIDTH; temp_x < (x+1)*LCD_PIXEL_WIDTH/BOARD_WIDTH; temp_x++){
+		for(int temp_y = y*LCD_PIXEL_HEIGHT/BOARD_HEIGHT; temp_y < (y+1)*LCD_PIXEL_HEIGHT/BOARD_HEIGHT; temp_y++){
+			LCD_Draw_Pixel(temp_x,temp_y,color);
+		}
+	}
+
+
+}
+
+// Draw the game board and current score
+void draw_board() {
+//clear
+    for (int y = 0; y < BOARD_HEIGHT; y++) {
+        for (int x = 0; x < BOARD_WIDTH; x++) {
+            if (board[y][x]) {
+            	draw_block(x,y,LCD_COLOR_WHITE);
+            } else {
+            	draw_block(x,y,LCD_COLOR_BLACK);
+            }
+        }
+    }
+
+    for (uint8_t y = 0; y < 4; y++) {
+    	for (uint8_t x = 0; x<4; x++) {
+    		if(current_tetromino[y][x]) {
+    			draw_block(x+current_x,(y+current_y),LCD_COLOR_WHITE);
+    		}
+    	}
+    }
+}
+
+// Spawn a new tetromino at the top
+void spawn_tetromino() {
+	current_type = HAL_RNG_GetRandomNumber(&HRNG)%7;
+    current_rotation = 0;
+
+    for (int y = 0; y < 4; y++) {
+        for (int x = 0; x < 4; x++) {
+            current_tetromino[y][x] = tetrominoes[current_type][y][x];
+        }
+    }
+
+    current_x = BOARD_WIDTH / 2 - 2;
+    current_y = 0;
+}
+
+// Rotate the current tetromino
+void rotate_tetromino() {
+    int temp[4][4];
+    // Rotate the tetromino 90 degrees
+    for (int y = 0; y < 4; y++) {
+        for (int x = 0; x < 4; x++) {
+            temp[y][x] = current_tetromino[3 - x][y];
+        }
+    }
+
+    switch(current_rotation) {
+    case 0:
+    	current_x--;
+    	current_x--;
+    	break;
+    case 1:
+    	current_y--;
+    	current_y--;
+    	break;
+    case 2:
+    	current_x++;
+    	current_x++;
+    	break;
+    case 3:
+        current_y++;
+        current_y++;
+        break;
+    }
+
+    // Check if rotated position is valid
+    for (int y = 0; y < 4; y++) {
+        for (int x = 0; x < 4; x++) {
+            current_tetromino[y][x] = temp[y][x];
+        }
+    }
+
+    if (check_collision(current_x, current_y)) {
+        // If collision occurs, revert the rotation
+        switch(current_rotation) {
+        case 0:
+        	current_x++;
+        	current_x++;
+        	break;
+        case 1:
+        	current_y++;
+        	current_y++;
+        	break;
+        case 2:
+        	current_x--;
+        	current_x--;
+        	break;
+        case 3:
+            current_y--;
+            current_y--;
+            break;
+
+        for (int y = 0; y < 4; y++) {
+            for (int x = 0; x < 4; x++) {
+                current_tetromino[y][x] = tetrominoes[current_type][y][x];
+
+                }
+            }
+        }
+    }
+    else {
+    	current_rotation = (current_rotation+1)%4;
+    }
+
+
+}
+
+// Check if the current tetromino collides with the board or other blocks
+int check_collision(int x, int y) {
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            if (current_tetromino[i][j]) {
+                int board_x = x + j;
+                int board_y = y + i;
+                if (board_x < 0 || board_x >= BOARD_WIDTH || board_y >= BOARD_HEIGHT || (board_y >= 0 && board[board_y][board_x])) {
+                    return 1;
+                }
+            }
+        }
+    }
+    return 0;
+}
+
+// Move the tetromino down by one row
+void move_down() {
+    if (!check_collision(current_x, current_y + 1)) {
+        current_y++;
+    } else {
+        // Place the tetromino on the board
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (current_tetromino[i][j]) {
+                    board[current_y + i][current_x + j] = 1;
+                }
+            }
+        }
+
+        // Clear full lines
+        clear_lines();
+
+        if(current_y==0) {
+        	game_over();
+        }
+        else {
+        spawn_tetromino();
+        }
+    }
+}
+
+// Drop the tetromino to the bottom
+void drop_tetromino() {
+    while (!check_collision(current_x, current_y + 1)) {
+        current_y++;
+    }
+}
+
+// Move the tetromino left by one unit
+void move_left() {
+    if (!check_collision(current_x - 1, current_y)) {
+        current_x--;
+    }
+}
+
+// Move the tetromino right by one unit
+void move_right() {
+    if (!check_collision(current_x + 1, current_y)) {
+        current_x++;
+    }
+}
+
+// Clear any full lines
+void clear_lines() {
+    for (int y = BOARD_HEIGHT - 1; y >= 0; y--) {
+        int full = 1;
+        for (int x = 0; x < BOARD_WIDTH; x++) {
+            if (board[y][x] == 0) {
+                full = 0;
+                break;
+            }
+        }
+
+        if (full) {
+            // Shift all rows above down
+            for (int i = y; i > 0; i--) {
+                for (int x = 0; x < BOARD_WIDTH; x++) {
+                    board[i][x] = board[i - 1][x];
+                }
+            }
+            // Clear the top row
+            for (int x = 0; x < BOARD_WIDTH; x++) {
+                board[0][x] = 0;
+            }
+            score += 100; // Increase score for clearing a line
+            y++; // Recheck the same row after shift
+        }
+    }
+}
+
+void place_tetromino() {
+    for (uint8_t i = 0; i < 4; i++) {
+        for (uint8_t j = 0; j < 4; j++) {
+            if (current_tetromino[i][j]) {
+                uint8_t x = current_x + j;
+                uint8_t y = current_y + i;
+                if (y >= 0) {
+                    board[y][x] = 1;
+                }
+            }
+        }
+    }
+    clear_lines();
+}
+
+// Game over
+void game_over() {
+	LCD_Clear(0, LCD_COLOR_RED);
+	Timer2_Stop();
+	uint32_t Time_Played = GetGameTime();
+
+	LCD_SetTextColor(LCD_COLOR_BLACK);
+	LCD_SetFont(&Font16x24);
+
+	LCD_DisplayChar(100,140,'T');
+	LCD_DisplayChar(110,140,'I');
+	LCD_DisplayChar(120,140,'M');
+	LCD_DisplayChar(135,140,'E');
+	LCD_DisplayChar(145,140,':');
+
+	char* time_string;
+	time_string = malloc((log10(Time_Played)+1) * 8);
+	sprintf(time_string, "%d", Time_Played);
+
+	for(int i=0; i <= sizeof(time_string); i++) {
+		LCD_DisplayChar(100 + 10*i,160,time_string[i]);
+	}
+	LCD_DisplayChar(150 ,160,'m');
+	LCD_DisplayChar(165 ,160,'s');
+	while(1);
+}
+
+void Game_RNG_Init() {
+	HRNG.Instance = RNG;
+	__HAL_RCC_RNG_CLK_ENABLE();
+	HAL_RNG_Init(&HRNG);
+}
+

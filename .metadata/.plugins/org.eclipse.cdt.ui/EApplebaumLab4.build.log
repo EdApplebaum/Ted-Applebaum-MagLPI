@@ -1,0 +1,10 @@
+14:49:56 **** Incremental Build of configuration Debug for project EApplebaumLab4 ****
+make -j20 all 
+arm-none-eabi-size  EApplebaumLab4.elf 
+   text	   data	    bss	    dec	    hex	filename
+   3100	      0	   1568	   4668	   123c	EApplebaumLab4.elf
+Finished building: default.size.stdout
+ 
+
+14:49:57 Build Finished. 0 errors, 0 warnings. (took 150ms)
+

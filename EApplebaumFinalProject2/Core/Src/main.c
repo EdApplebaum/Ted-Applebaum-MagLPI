@@ -18,7 +18,8 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "ApplicationCode.h"
+
+
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
@@ -41,19 +42,37 @@ int main(void)
 
   ApplicationInit(); // Initializes the LCD functionality
 
-  LCD_Visual_Demo();
-
-  LCD_Touch_Polling_Demo();
-
-  HAL_Delay(5000);
-
   // DO NOT CALL THIS FUNCTION WHEN INTERRUPT MODE IS SELECTED IN THE COMPILE SWITCH IN stmpe811.h
   // Un-comment the below function after setting COMPILE_TOUCH to 1 in stmpe811.h
   //LCD_Touch_Polling_Demo(); // This function Will not return
+  Display_Start_Screen();
+  draw_board();
+  while(Check_Start()==0) {
+	  HAL_Delay(10);
+  }
+  initialize_game();
+  draw_board();
+  uint32_t events;
 
   while (1)
   {
+	  move_down();
+	  events = getScheduledEvents();
+	  if(events & ROTATE_EVENT) {
+		  rotate_tetromino();
+		  removeSchedulerEvent(ROTATE_EVENT);
+	  }
+	  if(events & MOVE_LEFT_EVENT){
+		  move_left();
+		  removeSchedulerEvent(MOVE_LEFT_EVENT);
+	  }
+	  if(events & MOVE_RIGHT_EVENT){
+		  move_right();
+		  removeSchedulerEvent(MOVE_RIGHT_EVENT);
+	  }
 
+	  draw_board();
+	  HAL_Delay(1000);
   }
 
 }
@@ -339,3 +358,4 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
+

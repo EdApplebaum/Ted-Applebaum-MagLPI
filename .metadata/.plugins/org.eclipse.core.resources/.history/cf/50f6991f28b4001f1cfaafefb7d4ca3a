@@ -1,0 +1,15 @@
+/*
+ * Timer_Driver.h
+ *
+ *  Created on: Nov 19, 2024
+ *      Author: 14408
+ */
+
+#ifndef INC_TIMER_DRIVER_H_
+#define INC_TIMER_DRIVER_H_
+#include "stm32f4xx_hal.h"
+
+void TimerInit();
+
+
+#endif /* INC_TIMER_DRIVER_H_ */
