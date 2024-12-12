@@ -47,6 +47,22 @@ int main(void)
   //LCD_Touch_Polling_Demo(); // This function Will not return
   Display_Start_Screen();
   draw_board();
+
+  LCD_SetTextColor(LCD_COLOR_BLUE);
+  LCD_SetFont(&Font16x24);
+  LCD_DisplayChar(60,40,'T');
+  LCD_DisplayChar(75,40,'O');
+  LCD_DisplayChar(90,40,'U');
+  LCD_DisplayChar(105,40,'C');
+  LCD_DisplayChar(120,40,'H');
+  LCD_DisplayChar(60,60,'T');
+  LCD_DisplayChar(75,60,'O');
+  LCD_DisplayChar(60,80,'S');
+  LCD_DisplayChar(75,80,'T');
+  LCD_DisplayChar(90,80,'A');
+  LCD_DisplayChar(105,80,'R');
+  LCD_DisplayChar(120,80,'T');
+
   while(Check_Start()==0) {
 	  HAL_Delay(10);
   }
