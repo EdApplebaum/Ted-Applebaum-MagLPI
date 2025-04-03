@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Delete resource &apos;EApplebaumFinalProject2/Debug/EApplebaumFinalProject2.elf&apos;" deleteContents="false" description="Delete resource &apos;EApplebaumFinalProject2/Debug/EApplebaumFinalProject2.elf&apos;" element1="/EApplebaumFinalProject2/Debug/EApplebaumFinalProject2.elf" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1733865174651"/>
-</session>
