@@ -1,6 +1,0 @@
-../Core/Src/Timer_Driver.c:10:6:Timer2_Init	8	static
-../Core/Src/Timer_Driver.c:39:6:Timer2_Start	4	static
-../Core/Src/Timer_Driver.c:43:6:Timer2_Stop	4	static
-../Core/Src/Timer_Driver.c:47:6:Timer2_Reset	4	static
-../Core/Src/Timer_Driver.c:51:10:GetGameTime	4	static
-../Core/Src/Timer_Driver.c:54:6:TIM2_IRQHandler	8	static
